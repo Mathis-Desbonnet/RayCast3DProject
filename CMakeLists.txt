@@ -12,6 +12,9 @@ add_executable(RayCast3DProject main.c
         SDLWindow.c
         SDLWindow.h
         Player.c
-        Player.h)
+        Player.h
+        algoBresenham.c
+        algoBresenham.h
+        algoBresenham.c)
 
 target_link_libraries(RayCast3DProject ${SDL2_LIBRARY})
