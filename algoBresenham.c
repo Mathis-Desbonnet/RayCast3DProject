@@ -99,8 +99,8 @@ void detect(int x0, int y0, int x1, int y1, int** listOfBlock, int angle, SDL_Re
     }
 }
 
-int distance(float x0, float y0, float x1, float y1) {
-    return sqrt((x1*x1 - x0*x0)+(y1*y1-y0*y0));
+double distance(float x0, float y0, float x1, float y1) {
+    return sqrtf(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
 }
 
 void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_Point* point) {
@@ -178,20 +178,26 @@ void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int an
         //SDL_Log("");
         //SDL_Log("");
         //SDL_Log("");
-        //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-        //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
-        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+//        SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+//        SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
+//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//        SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+        point->x = 10000;
+        point->y = 10000;
         if (distance(x0, y0, rx1, ry1) >= distance(x0, y0, rx2, ry2)) {
-            point->x = rx2;
-            point->y = ry2;
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+            if (((rx2 < 1920 && rx2 > 0) || (ry2 < 1080 && ry2 < 0)) && distance(x0, y0, rx2, ry2) >= 0) {
+                point->x = rx2;
+                point->y = ry2;
+            }
+//            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//            SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
         } else {
-            point->x = rx1;
-            point->y = ry1;
-            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-            SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
+            if (((rx1 < 1920 && rx1 > 0) || (ry1 < 1080 && ry1 < 0)) && distance(x0, y0, rx1, ry1) > 10) {
+                point->x = rx1;
+                point->y = ry1;
+            }
+//            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+//            SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
         }
     }
 }
