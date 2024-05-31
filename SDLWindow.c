@@ -27,15 +27,31 @@ void SDLQuit(SDL_Window* window, SDL_Renderer* renderer) {
     SDL_Quit();
 }
 
-SDL_Rect* createAllRect(int listOfBlock[10][10], int* logSize) {
-    SDL_Rect* listOfRect = (SDL_Rect*) malloc(sizeof(SDL_Rect)*100);
-    for (int i = 0; i< 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            if (listOfBlock[i][j] == 1) {
-                listOfRect[*logSize].w = 192;
-                listOfRect[*logSize].h = 108;
-                listOfRect[*logSize].x = j*192;
-                listOfRect[*logSize].y = i*108;
+int** generateRect(int size) {
+    int** rectList = (int**) malloc(sizeof(int*)*size);
+    for (int i = 0; i<size; i++) {
+        rectList[i] = (int*) malloc(sizeof(int)*size);
+        for (int j = 0; j<size; j++) {
+            if (rand()%10 > 8) {
+                rectList[i][j] = 1;
+            } else {
+                rectList[i][j] = 0;
+            }
+
+        }
+    }
+    return rectList;
+}
+
+SDL_Rect* createAllRect(int listOfBlock[SIZE][SIZE], int* logSize) {
+    SDL_Rect* listOfRect = (SDL_Rect*) malloc(sizeof(SDL_Rect)*SIZE*SIZE);
+    for (int i = 0; i< SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if (listOfBlock[i][j] > 0) {
+                listOfRect[*logSize].w = 1920/SIZE;
+                listOfRect[*logSize].h = 1080/SIZE;
+                listOfRect[*logSize].x = j*(1920/SIZE);
+                listOfRect[*logSize].y = i*(1080/SIZE);
                 *logSize += 1;
             }
         }
