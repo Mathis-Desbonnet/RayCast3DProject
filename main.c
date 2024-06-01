@@ -55,9 +55,17 @@ int main(int argc, char* argv[]) {
     SDL_FPoint viewPointOfPlayer;
     SDL_FPoint listOfPoint[360];
     SDL_Rect newRect;
+    SDL_Rect skyRect;
+    SDL_Rect floorRect;
     newRect.y = 0;
     newRect.w = 1920/90;
     newRect.h = 1080;
+    skyRect.y = 0;
+    skyRect.w = 1920/90;
+    skyRect.h = 1080;
+    floorRect.y = 0;
+    floorRect.w = 1920/90;
+    floorRect.h = 1080;
 
     int view2D = 1;
     int hasChanged = 0;
@@ -116,8 +124,18 @@ int main(int argc, char* argv[]) {
         } else { //3D Graphics
             for (i = 0; i < 90;i++) {
                 newRect.x = (1920/90)*i;
-                newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y)*5));
+                newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y))*5);
                 newRect.y = 540-newRect.h/2+z;
+                skyRect.y = 0;
+                skyRect.h = newRect.y;
+                skyRect.x = (1920/90)*i;
+                floorRect.x = (1920/90)*i;
+                floorRect.y = newRect.h+newRect.y;
+                floorRect.h = 1080-floorRect.y;
+                SDL_SetRenderDrawColor(SDLRenderer, 3, 182, 252, 255);
+                SDL_RenderFillRect(SDLRenderer, &skyRect);
+                SDL_SetRenderDrawColor(SDLRenderer, 207, 181, 161, 255);
+                SDL_RenderFillRect(SDLRenderer, &floorRect);
                 switch (typeOfWall[i]) {
                     case 1 :
                         SDL_SetRenderDrawColor(SDLRenderer, 0, 0, 255, 255);
