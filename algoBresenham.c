@@ -162,12 +162,12 @@ void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int an
             yo = -xo*nTan;
         } if (ra == 270) {
             rx2 = x0;
-            ry2 = -1000;
+            ry2 = -2000;
             stop = SIZE*SIZE;
         }
         if (ra == 90) {
             rx2 = x0;
-            ry2 = 1000;
+            ry2 = 2000;
             stop = SIZE*SIZE;
         }
         while (stop < SIZE*SIZE) {
@@ -194,7 +194,7 @@ void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int an
 //        SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
         point->x = 10000;
         point->y = 10000;
-        if (distance(x0, y0, rx1, ry1) >= distance(x0, y0, rx2, ry2) && distance(x0, y0, rx2, ry2) >= 0) {
+        if (distance(x0, y0, rx1, ry1) >= distance(x0, y0, rx2, ry2) && !(ra == 90 || ra == 270)) {
             if (((rx2 < 1920 && rx2 > 0) || (ry2 < 1080 && ry2 < 0))) {
                 point->x = rx2;
                 point->y = ry2;
