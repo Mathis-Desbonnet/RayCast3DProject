@@ -35,20 +35,20 @@ void movePlayer(Player *firstPlayer, int speed, const Uint8 *keyState, SDL_Rect 
         viewPoint->x -= speed*cos(angle);
     }
     if (keyState[SDL_GetScancodeFromKey(SDLK_q)] || keyState[SDL_GetScancodeFromKey(SDLK_RIGHT)]) {
-        firstPlayer->posY -= speed*cos(angle);
-        firstPlayer->posX -= speed*sin(angle);
-        (*playerRect).y -= speed*cos(angle);
-        (*playerRect).x -= speed*sin(angle);
-        viewPoint->y -= speed*cos(angle);
-        viewPoint->x -= speed*sin(angle);
-    }
-    if (keyState[SDL_GetScancodeFromKey(SDLK_d)] || keyState[SDL_GetScancodeFromKey(SDLK_LEFT)]) {
         firstPlayer->posY += speed*cos(angle);
         firstPlayer->posX += speed*sin(angle);
         (*playerRect).y += speed*cos(angle);
         (*playerRect).x += speed*sin(angle);
         viewPoint->y += speed*cos(angle);
         viewPoint->x += speed*sin(angle);
+    }
+    if (keyState[SDL_GetScancodeFromKey(SDLK_d)] || keyState[SDL_GetScancodeFromKey(SDLK_LEFT)]) {
+        firstPlayer->posY -= speed*cos(angle);
+        firstPlayer->posX -= speed*sin(angle);
+        (*playerRect).y -= speed*cos(angle);
+        (*playerRect).x -= speed*sin(angle);
+        viewPoint->y -= speed*cos(angle);
+        viewPoint->x -= speed*sin(angle);
     }
 }
 

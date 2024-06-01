@@ -201,13 +201,13 @@ int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int ang
         point->y = ry2;
         //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         //SDL_RenderDrawLineF(renderer, x1, y1, rx2, ry2);
-        return 1;
+        return listOfBlock[(int) (ry2) / (1080 / SIZE)][(int) (rx2) / (1920 / SIZE)];
     } else if (distance(x1, y1, rx1, ry1) < distance(x1, y1, rx2, ry2)) {
         point->x = rx1;
         point->y = ry1;
         //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
         //SDL_RenderDrawLineF(renderer, x1, y1, rx1, ry1);
-        return 0;
+        return listOfBlock[(int) (ry1) / (1080 / SIZE)][(int) (rx1) / (1920 / SIZE)]+10;
     }
     return -1;
 }
