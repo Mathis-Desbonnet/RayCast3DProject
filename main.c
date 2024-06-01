@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
 //        SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
 //        for (i = 0; i<90;i++) {
 //            if (!(listOfPoint[i].x > 1920 || listOfPoint[i].x < 0 || listOfPoint[i].y < 0 || listOfPoint[i].y > 1080)) {
-//                SDL_RenderDrawLine(SDLRenderer, viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y);
+//                //SDL_RenderDrawLine(SDLRenderer, viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y);
 //            }
 //            //SDL_RenderDrawLine(SDLRenderer, viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y);
 //        }
