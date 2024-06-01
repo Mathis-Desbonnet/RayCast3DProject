@@ -59,3 +59,11 @@ void calculateAnglePointPlayer(const Player *firstPlayer, float angle, float x, 
     (*viewPointPlayer).x = firstPlayer->posX+25+((cosf((angle*PI/180))*xPlayerPosView) - (sinf(angle*PI/180)*yPlayerPosView));
     (*viewPointPlayer).y = firstPlayer->posY+25+((cosf(angle*PI/180)*yPlayerPosView) + (sinf(angle*PI/180)*xPlayerPosView));
 }
+
+void changeAngle(float* angle, const Uint8* keyState) {
+    if (keyState[SDL_GetScancodeFromKey(SDLK_a)]) {
+        (*angle)--;
+    } else if (keyState[SDL_GetScancodeFromKey(SDLK_e)]) {
+        (*angle)++;
+    }
+}
