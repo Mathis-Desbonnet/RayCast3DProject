@@ -199,15 +199,15 @@ void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int an
                 point->x = rx2;
                 point->y = ry2;
             }
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+            //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
         } else if (distance(x0, y0, rx1, ry1) >= 10){
             if (((rx1 < 1920 && rx1 > 0) || (ry1 < 1080 && ry1 < 0)) && distance(x0, y0, rx1, ry1) > 10) {
                 point->x = rx1;
                 point->y = ry1;
             }
-            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-            SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
+            //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+            //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
         }
     }
 }
