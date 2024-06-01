@@ -12,11 +12,11 @@ int main(int argc, char* argv[]) {
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,3,0,3,0,3,0,0,0,1},
-            {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,3,0,0,0,3,0,0,0,1},
-            {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,3,0,3,0,3,0,0,0,1},
+            {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+            {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+            {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -110,10 +110,32 @@ int main(int argc, char* argv[]) {
                     newRect.h = 1080;
                 }
                 newRect.y = 540-newRect.h/2;
-                if (typeOfWall[i] == 1) {
-                    SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
-                } else {
-                    SDL_SetRenderDrawColor(SDLRenderer, 0, 150, 0, 255);
+                switch (typeOfWall[i]) {
+                    case 1 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 0, 0, 255, 255);
+                        break;
+                    case 2 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 255, 255, 255, 255);
+                        break;
+                    case 3 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 255, 0, 0, 255);
+                        break;
+                    case 4 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 255, 255, 0, 255);
+                        break;
+                    case 11 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 0, 0, 127, 255);
+                        break;
+                    case 12 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 127, 127, 127, 255);
+                        break;
+                    case 13 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 127, 0, 0, 255);
+                        break;
+                    case 14 :
+                        SDL_SetRenderDrawColor(SDLRenderer, 127, 127, 0, 255);
+                        break;
+                    default: break;
                 }
                 SDL_RenderFillRect(SDLRenderer, &newRect);
             }
