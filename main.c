@@ -81,10 +81,14 @@ int main(int argc, char* argv[]) {
             SDL_Delay(10);
         }
         if (keyState[SDL_GetScancodeFromKey(SDLK_w)]) {
-            z -= 5;
+            if (z > -1000) {
+                z -= 10;
+            }
         }
         if (keyState[SDL_GetScancodeFromKey(SDLK_x)]) {
-            z += 5;
+            if (z < 1000) {
+                z += 10;
+            }
         }
         SDL_SetRenderDrawColor(SDLRenderer, 0, 0 ,0, 255);
         SDL_RenderClear(SDLRenderer);
@@ -113,9 +117,6 @@ int main(int argc, char* argv[]) {
             for (i = 0; i < 90;i++) {
                 newRect.x = (1920/90)*i;
                 newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y)*5));
-                if (newRect.h > 1080) {
-                    newRect.h = 1080;
-                }
                 newRect.y = 540-newRect.h/2+z;
                 switch (typeOfWall[i]) {
                     case 1 :
