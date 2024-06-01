@@ -44,6 +44,7 @@ int main(int argc, char* argv[]) {
     int logSize = 0;
     int angle = 0;
     int i;
+    int z = 0;
     SDL_CreateWindowAndRenderer(1920, 1080, SDL_WINDOW_FULLSCREEN_DESKTOP, &SDLWindow, &SDLRenderer);
     SDL_Texture* playerTexture = SDL_CreateTextureFromSurface(SDLRenderer, playerImage);
     SDL_FreeSurface(playerImage);
@@ -79,6 +80,12 @@ int main(int argc, char* argv[]) {
             }
             SDL_Delay(10);
         }
+        if (keyState[SDL_GetScancodeFromKey(SDLK_w)]) {
+            z -= 5;
+        }
+        if (keyState[SDL_GetScancodeFromKey(SDLK_x)]) {
+            z += 5;
+        }
         SDL_SetRenderDrawColor(SDLRenderer, 0, 0 ,0, 255);
         SDL_RenderClear(SDLRenderer);
         calculateAnglePointPlayer(firstPlayer, angle, 1920, 0, 25, 0, &viewPointForWalls, &viewPointOfPlayer);
@@ -109,7 +116,7 @@ int main(int argc, char* argv[]) {
                 if (newRect.h > 1080) {
                     newRect.h = 1080;
                 }
-                newRect.y = 540-newRect.h/2;
+                newRect.y = 540-newRect.h/2+z;
                 switch (typeOfWall[i]) {
                     case 1 :
                         SDL_SetRenderDrawColor(SDLRenderer, 0, 0, 255, 255);
