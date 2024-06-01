@@ -52,7 +52,7 @@ void movePlayer(Player *firstPlayer, int speed, const Uint8 *keyState, SDL_Rect 
     }
 }
 
-void calculateAnglePointPlayer(const Player *firstPlayer, float angle, float x, float y, float xPlayerPosView,
+void calculateAnglePointPlayer(const Player *firstPlayer, int angle, float x, float y, float xPlayerPosView,
                                float yPlayerPosView, SDL_FPoint *viewPointWall, SDL_FPoint *viewPointPlayer) {
     (*viewPointWall).x = (cosf((angle * PI / 180)) * x) - (sinf(angle * PI / 180) * y);
     (*viewPointWall).y = (cosf(angle * PI / 180) * y) + (sinf(angle * PI / 180) * x);
@@ -60,7 +60,7 @@ void calculateAnglePointPlayer(const Player *firstPlayer, float angle, float x, 
     (*viewPointPlayer).y = firstPlayer->posY+25+((cosf(angle*PI/180)*yPlayerPosView) + (sinf(angle*PI/180)*xPlayerPosView));
 }
 
-void changeAngle(float* angle, const Uint8* keyState) {
+void changeAngle(int* angle, const Uint8* keyState) {
     if (keyState[SDL_GetScancodeFromKey(SDLK_a)]) {
         (*angle)--;
     } else if (keyState[SDL_GetScancodeFromKey(SDLK_e)]) {
