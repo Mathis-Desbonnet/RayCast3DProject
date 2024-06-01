@@ -99,115 +99,115 @@ void detect(int x0, int y0, int x1, int y1, int** listOfBlock, int angle, SDL_Re
     }
 }
 
-double distance(float x0, float y0, float x1, float y1) {
-    return sqrtf(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
+double distance(int x0, int y0, double x1, double y1) {
+    return sqrt(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
 }
 
-void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_Point* point) {
+int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint* point) {
     int mx, my, mp, stop, ra;
-    float rx1, ry1, rx2, ry2, xo, yo, aTan, nTan;
+    double aTan, nTan, rx2, ry2, rx1, ry1, xo, yo;
     ra = angle%360;
     while (ra < 0) {
         ra += 360;
     }
-    for (int r = 0; r<1; r++) {
-        stop = 0;
-        aTan = -(1/tanf(ra*PI/180));
-        if (ra > 180) {
-            ry1 = y0;
-            rx1 = (y0-ry1)*aTan+x0;
-            yo = -5;
-            xo = -yo*aTan;
-        } if (ra < 180) {
-            ry1 = y0 + 5;
-            rx1 = (y0-ry1)*aTan+x0;
-            yo = 5;
-            xo = -yo*aTan;
-        } if (ra == 0) {
-            rx1 = 10000;
-            ry1 = y0;
-            stop = SIZE*SIZE;
-        }
-        if (ra == 180) {
-            rx1 = -10000;
-            ry1 = y0;
-            stop = SIZE*SIZE;
-        }
-        while (stop < SIZE*SIZE) {
-
-            mx = (int) (rx1)/(1920/SIZE);
-            my = (int) (ry1)/(1080/SIZE);
-            //SDL_Log("%f %f %d\t %f %f\t %d %d", rx, ry, ra, x0, y0, mx, my);
-            mp = my*SIZE+mx;
-            if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
-                stop = SIZE*SIZE;
-            } else {
-                rx1 += xo;
-                ry1 += yo;
-                stop++;
-            }
-
-        }
-        stop = 0;
-        nTan = -tan(ra*PI/180);
-        if (ra > 90 && ra < 270) {
-            rx2 = x0;
-            ry2 = (x0-rx2)*nTan+y0;
-            xo = -5;
-            yo = -xo*nTan;
-        } if (ra < 90 || ra > 270) {
-            rx2 = x0 + 5;
-            ry2 = (x0-rx2)*nTan+y0;
-            xo = 5;
-            yo = -xo*nTan;
-        } if (ra == 270) {
-            rx2 = x0;
-            ry2 = -2000;
-            stop = SIZE*SIZE;
-        }
-        if (ra == 90) {
-            rx2 = x0;
-            ry2 = 2000;
-            stop = SIZE*SIZE;
-        }
-        while (stop < SIZE*SIZE) {
-
-            mx = (int) (rx2)/(1920/SIZE);
-            my = (int) (ry2)/(1080/SIZE);
-            //SDL_Log("%f %f %d\t %f %f\t %d %d\t %d", rx2, ry2, ra, x0, y0, mx, my, angle);
-            mp = my*SIZE+mx;
-            if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
-                stop = SIZE*SIZE;
-            } else {
-                rx2 += xo;
-                ry2 += yo;
-                stop++;
-            }
-
-        }
-        //SDL_Log("");
-        //SDL_Log("");
-        //SDL_Log("");
-//        SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-//        SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
-//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-//        SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
-        point->x = 10000;
-        point->y = 10000;
-        if (distance(x0, y0, rx1, ry1) >= distance(x0, y0, rx2, ry2) && !(ra == 90 || ra == 270)) {
-            if (((rx2 < 1920 && rx2 > 0) || (ry2 < 1080 && ry2 < 0))) {
-                point->x = rx2;
-                point->y = ry2;
-            }
-            //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
-        } else if (distance(x0, y0, rx1, ry1) >= 10){
-            if (((rx1 < 1920 && rx1 > 0) || (ry1 < 1080 && ry1 < 0)) && distance(x0, y0, rx1, ry1) > 10) {
-                point->x = rx1;
-                point->y = ry1;
-            }
-            //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-            //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
-        }
+    stop = 0;
+    aTan = -(1 / tanf(ra * PI / 180));
+    if (ra > 180) {
+        ry1 = y1 - 0.0001;
+        rx1 = (y1 - ry1) * aTan + x1;
+        yo = -1;
+        xo = -yo * aTan;
     }
+    if (ra < 180) {
+        ry1 = y1 + 1;
+        rx1 = (y1 - ry1) * aTan + x1;
+        yo = 1;
+        xo = -yo * aTan;
+    }
+    if (ra == 0) {
+        rx1 = 2000;
+        ry1 = y1;
+        stop = SIZE * SIZE*3;
+    }
+    if (ra == 180) {
+        rx1 = -2000;
+        ry1 = y1;
+        stop = SIZE * SIZE*3;
+    }
+    while (stop < SIZE * SIZE*3) {
+
+        mx = (int) (rx1) / (1920 / SIZE);
+        my = (int) (ry1) / (1080 / SIZE);
+        //SDL_Log("%f %f %d\t %f %f\t %d %d", rx, ry, ra, x0, y0, mx, my);
+        mp = my * SIZE + mx;
+        if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
+            stop = SIZE * SIZE*3;
+        } else {
+            rx1 += xo;
+            ry1 += yo;
+            stop++;
+        }
+
+    }
+    stop = 0;
+    nTan = -tan(ra * PI / 180);
+    if (ra > 90 && ra < 270) {
+        rx2 = x1 - 0.0001;
+        ry2 = (x1 - rx2) * nTan + y1;
+        xo = -1;
+        yo = -xo * nTan;
+    }
+    if (ra < 90 || ra > 270) {
+        rx2 = x1 + 1;
+        ry2 = (x1 - rx2) * nTan + y1;
+        xo = 1;
+        yo = -xo * nTan;
+    }
+    if (ra == 270) {
+        rx2 = x1;
+        ry2 = -2000;
+        stop = SIZE * SIZE*3;
+    }
+    if (ra == 90) {
+        rx2 = x1;
+        ry2 = 2000;
+        stop = SIZE * SIZE*3;
+    }
+    while (stop < SIZE * SIZE*3) {
+
+        mx = (int) (rx2) / (1920 / SIZE);
+        my = (int) (ry2) / (1080 / SIZE);
+        //SDL_Log("%f %f %d\t %f %f\t %d %d\t %d", rx2, ry2, ra, x0, y0, mx, my, angle);
+        mp = my * SIZE + mx;
+        if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
+            stop = SIZE * SIZE*3;
+        } else {
+            rx2 += xo;
+            ry2 += yo;
+            stop++;
+        }
+
+    }
+    //SDL_Log("");
+    //SDL_Log("");
+    //SDL_Log("");
+    //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+    //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+    //SDL_Log("%d %f %f", ra, aTan, nTan);
+    if (distance(x1, y1, rx1, ry1) > distance(x1, y1, rx2, ry2)) {
+        point->x = rx2;
+        point->y = ry2;
+        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        //SDL_RenderDrawLineF(renderer, x1, y1, rx2, ry2);
+        return 1;
+    } else if (distance(x1, y1, rx1, ry1) < distance(x1, y1, rx2, ry2)) {
+        point->x = rx1;
+        point->y = ry1;
+        //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+        //SDL_RenderDrawLineF(renderer, x1, y1, rx1, ry1);
+        return 0;
+    }
+    return -1;
 }

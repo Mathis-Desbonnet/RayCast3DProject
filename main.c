@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
     int running = 1;
     int speed = 3;
     int logSize = 0;
-    float angle = 0;
+    int angle = 0;
     int i;
     SDL_CreateWindowAndRenderer(1920, 1080, SDL_WINDOW_FULLSCREEN_DESKTOP, &SDLWindow, &SDLRenderer);
     SDL_Texture* playerTexture = SDL_CreateTextureFromSurface(SDLRenderer, playerImage);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     const Uint8* keyState = SDL_GetKeyboardState(NULL);
     SDL_FPoint viewPointForWalls = {3000, 0};
     SDL_FPoint viewPointOfPlayer;
-    SDL_Point listOfPoint[360];
+    SDL_FPoint listOfPoint[360];
     SDL_Rect newRect;
     newRect.y = 0;
     newRect.w = 1920/90;
@@ -60,9 +60,9 @@ int main(int argc, char* argv[]) {
 
     int view2D = 1;
     int hasChanged = 0;
-    while (running) {
 
-        //2D Running
+    int typeOfWall[90];
+    while (running) {
 
         SDL_PollEvent(&newEvent);
         if (SDL_QUIT == newEvent.type || keyState[SDL_GetScancodeFromKey(SDLK_ESCAPE)]) {
@@ -84,7 +84,8 @@ int main(int argc, char* argv[]) {
         calculateAnglePointPlayer(firstPlayer, angle, 1920, 0, 25, 0, &viewPointForWalls, &viewPointOfPlayer);
         i = 0;
         for (int j = -45; j <= 45; j++) {
-            DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, ((cosf(((angle-j) * PI / 180)) * 1920)+viewPointOfPlayer.x)/(1920/SIZE), ((sinf((angle-j) * PI / 180) * 1920)+viewPointOfPlayer.y)/(1080/SIZE), listOfBlock, (int) angle + j, SDLRenderer, &listOfPoint[i++]);
+            typeOfWall[i] = DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, firstPlayer->posX+25, firstPlayer->posY+25, listOfBlock, angle + j, SDLRenderer, &listOfPoint[i]);
+            i++;
         }
         movePlayer(firstPlayer, speed, keyState, &playerRect, &viewPointForWalls, angle*PI/180);
         changeAngle(&angle, keyState);
@@ -99,12 +100,9 @@ int main(int argc, char* argv[]) {
             SDL_RenderCopyEx(SDLRenderer, playerTexture, NULL, &playerRect, angle, NULL, SDL_FLIP_NONE);
             SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
             for (i = 0; i<90;i++) {
-                if (!(listOfPoint[i].x > 1920 || listOfPoint[i].x < 0 || listOfPoint[i].y < 0 || listOfPoint[i].y > 1080)) {
-                    SDL_RenderDrawLine(SDLRenderer, viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y);
-                }
+                SDL_RenderDrawLineF(SDLRenderer, firstPlayer->posX+25, firstPlayer->posY+25, listOfPoint[i].x, listOfPoint[i].y);
             }
         } else { //3D Graphics
-            SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
             for (i = 0; i < 90;i++) {
                 newRect.x = (1920/90)*i;
                 newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y)*5));
@@ -112,7 +110,11 @@ int main(int argc, char* argv[]) {
                     newRect.h = 1080;
                 }
                 newRect.y = 540-newRect.h/2;
-                SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
+                if (typeOfWall[i] == 1) {
+                    SDL_SetRenderDrawColor(SDLRenderer, 0, 255, 0, 255);
+                } else {
+                    SDL_SetRenderDrawColor(SDLRenderer, 0, 150, 0, 255);
+                }
                 SDL_RenderFillRect(SDLRenderer, &newRect);
             }
         }

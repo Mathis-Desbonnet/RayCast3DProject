@@ -15,8 +15,8 @@
 void detectHigh(int x0, int y0, int x1, int y1, int** listOfBlock, SDL_Renderer* renderer, SDL_Point* point);
 void detectLow(int x0, int y0, int x1, int y1, int** listOfBlock, SDL_Renderer* renderer, SDL_Point* point);
 void detect(int x0, int y0, int x1, int y1, int** listOfBlock, int angle, SDL_Renderer* renderer, SDL_Point* point);
-void DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_Point* point);
+int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint* point);
 
-double distance(float x0, float y0, float x1, float y1);
+double distance(int x0, int y0, double x1, double y1);
 
 #endif //RAYCAST3DPROJECT_ALGOBRESENHAM_H
