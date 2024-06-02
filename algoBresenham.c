@@ -103,7 +103,7 @@ double distance(int x0, int y0, double x1, double y1) {
     return sqrt(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
 }
 
-int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint point[360], int typeOfWall[90], float ca[90], int texture[]) {
+int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint point[360], int typeOfWall[90], float ca[90], int texture[], float tx[90]) {
     int mx, my, mp, stop, ra;
     double aTan, nTan, rx2, ry2, rx1, ry1, xo, yo;
     ra = (angle-45)%360;
@@ -201,17 +201,22 @@ int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int ang
         if (distance(x1, y1, rx1, ry1) > distance(x1, y1, rx2, ry2)) {
             point[i].x = rx2;
             point[i].y = ry2;
+            tx[i] = (int) (rx2/10.0) % 32;
             //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
             //SDL_RenderDrawLineF(renderer, x1, y1, rx2, ry2);
             typeOfWall[i] =  listOfBlock[(int) (ry2) / (1080 / SIZE)][(int) (rx2) / (1920 / SIZE)];
         } else if (distance(x1, y1, rx1, ry1) < distance(x1, y1, rx2, ry2)) {
             point[i].x = rx1;
             point[i].y = ry1;
+            tx[i] = (int) (rx1/10.0) % 32;
             //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
             //SDL_RenderDrawLineF(renderer, x1, y1, rx1, ry1);
             typeOfWall[i] = listOfBlock[(int) (ry1) / (1080 / SIZE)][(int) (rx1) / (1920 / SIZE)]+10;
         }
         ca[i] = angle-ra;
+        if (ra < 180) {
+            tx[i] = 31 - tx[i];
+        }
         ra += 1;
         if (ca[i] < 0) {
             ca[i] += 360;

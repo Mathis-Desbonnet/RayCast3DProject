@@ -117,6 +117,7 @@ int main(int argc, char* argv[]) {
 
     float ca[90];
     float ty, tyStep;
+    float tx[90];
     int color;
     SDL_Rect drawingRectangle;
     drawingRectangle.w = 1920/90;
@@ -151,7 +152,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(SDLRenderer, 0, 0 ,0, 255);
         SDL_RenderClear(SDLRenderer);
         calculateAnglePointPlayer(firstPlayer, angle, 1920, 0, 25, 0, &viewPointForWalls, &viewPointOfPlayer);
-        DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, firstPlayer->posX+25, firstPlayer->posY+25, listOfBlock, angle, SDLRenderer, listOfPoint, typeOfWall, ca, firstTexture);
+        DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, firstPlayer->posX+25, firstPlayer->posY+25, listOfBlock, angle, SDLRenderer, listOfPoint, typeOfWall, ca, firstTexture, tx);
         movePlayer(firstPlayer, speed, keyState, &playerRect, &viewPointForWalls, angle*PI/180);
         changeAngle(&angle, keyState);
 
@@ -214,7 +215,7 @@ int main(int argc, char* argv[]) {
                 ty = 0;
                 tyStep = 32/(float)newRect.h;
                 for (int y = newRect.y; y<newRect.h+newRect.y; y++) {
-                    color = firstTexture[(int)(ty)*32];
+                    color = firstTexture[(int)(ty)*32 + (int)(tx[i])];
                     SDL_SetRenderDrawColor(SDLRenderer, color*255, color*255, color*255, 255);
                     drawingRectangle.y = y;
                     drawingRectangle.x = newRect.x;
