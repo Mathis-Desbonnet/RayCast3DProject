@@ -103,7 +103,7 @@ double distance(int x0, int y0, double x1, double y1) {
     return sqrt(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
 }
 
-int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint point[360], int typeOfWall[90], float ca[90]) {
+int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint point[360], int typeOfWall[90], float ca[90], int texture[]) {
     int mx, my, mp, stop, ra;
     double aTan, nTan, rx2, ry2, rx1, ry1, xo, yo;
     ra = (angle-45)%360;
