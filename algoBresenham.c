@@ -103,111 +103,124 @@ double distance(int x0, int y0, double x1, double y1) {
     return sqrt(((x1-x0)*(x1-x0))+((y1-y0)*(y1-y0)));
 }
 
-int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint* point) {
+int DDA(float x0, float y0, int x1, int y1, int listOfBlock[SIZE][SIZE], int angle, SDL_Renderer* renderer, SDL_FPoint point[360], int typeOfWall[90], float ca[90]) {
     int mx, my, mp, stop, ra;
     double aTan, nTan, rx2, ry2, rx1, ry1, xo, yo;
-    ra = angle%360;
-    while (ra < 0) {
+    ra = (angle-45)%360;
+    if (ra < 0) {
         ra += 360;
     }
-    stop = 0;
-    aTan = -(1 / tanf(ra * PI / 180));
-    if (ra > 180) {
-        ry1 = y1 - 0.0001;
-        rx1 = (y1 - ry1) * aTan + x1;
-        yo = -1;
-        xo = -yo * aTan;
-    }
-    if (ra < 180) {
-        ry1 = y1 + 1;
-        rx1 = (y1 - ry1) * aTan + x1;
-        yo = 1;
-        xo = -yo * aTan;
-    }
-    if (ra == 0) {
-        rx1 = 2000;
-        ry1 = y1;
-        stop = SIZE * SIZE*3;
-    }
-    if (ra == 180) {
-        rx1 = -2000;
-        ry1 = y1;
-        stop = SIZE * SIZE*3;
-    }
-    while (stop < SIZE * SIZE*3) {
-
-        mx = (int) (rx1) / (1920 / SIZE);
-        my = (int) (ry1) / (1080 / SIZE);
-        //SDL_Log("%f %f %d\t %f %f\t %d %d", rx, ry, ra, x0, y0, mx, my);
-        mp = my * SIZE + mx;
-        if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
-            stop = SIZE * SIZE*3;
-        } else {
-            rx1 += xo;
-            ry1 += yo;
-            stop++;
+    for (int i = 0; i < 90; i++) {
+        ra = ra%360;
+        stop = 0;
+        aTan = -(1 / tanf(ra * PI / 180));
+        if (ra > 180) {
+            ry1 = y1 - 0.0001;
+            rx1 = (y1 - ry1) * aTan + x1;
+            yo = -1;
+            xo = -yo * aTan;
         }
-
-    }
-    stop = 0;
-    nTan = -tan(ra * PI / 180);
-    if (ra > 90 && ra < 270) {
-        rx2 = x1 - 0.0001;
-        ry2 = (x1 - rx2) * nTan + y1;
-        xo = -1;
-        yo = -xo * nTan;
-    }
-    if (ra < 90 || ra > 270) {
-        rx2 = x1 + 1;
-        ry2 = (x1 - rx2) * nTan + y1;
-        xo = 1;
-        yo = -xo * nTan;
-    }
-    if (ra == 270) {
-        rx2 = x1;
-        ry2 = -2000;
-        stop = SIZE * SIZE*3;
-    }
-    if (ra == 90) {
-        rx2 = x1;
-        ry2 = 2000;
-        stop = SIZE * SIZE*3;
-    }
-    while (stop < SIZE * SIZE*3) {
-
-        mx = (int) (rx2) / (1920 / SIZE);
-        my = (int) (ry2) / (1080 / SIZE);
-        //SDL_Log("%f %f %d\t %f %f\t %d %d\t %d", rx2, ry2, ra, x0, y0, mx, my, angle);
-        mp = my * SIZE + mx;
-        if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
-            stop = SIZE * SIZE*3;
-        } else {
-            rx2 += xo;
-            ry2 += yo;
-            stop++;
+        if (ra < 180) {
+            ry1 = y1 + 1;
+            rx1 = (y1 - ry1) * aTan + x1;
+            yo = 1;
+            xo = -yo * aTan;
         }
+        if (ra == 0) {
+            rx1 = 2000;
+            ry1 = y1;
+            stop = SIZE * SIZE*3;
+        }
+        if (ra == 180) {
+            rx1 = -2000;
+            ry1 = y1;
+            stop = SIZE * SIZE*3;
+        }
+        while (stop < SIZE * SIZE*3) {
 
-    }
-    //SDL_Log("");
-    //SDL_Log("");
-    //SDL_Log("");
-    //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-    //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
-    //SDL_Log("%d %f %f", ra, aTan, nTan);
-    if (distance(x1, y1, rx1, ry1) > distance(x1, y1, rx2, ry2)) {
-        point->x = rx2;
-        point->y = ry2;
-        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        //SDL_RenderDrawLineF(renderer, x1, y1, rx2, ry2);
-        return listOfBlock[(int) (ry2) / (1080 / SIZE)][(int) (rx2) / (1920 / SIZE)];
-    } else if (distance(x1, y1, rx1, ry1) < distance(x1, y1, rx2, ry2)) {
-        point->x = rx1;
-        point->y = ry1;
+            mx = (int) (rx1) / (1920 / SIZE);
+            my = (int) (ry1) / (1080 / SIZE);
+            //SDL_Log("%f %f %d\t %f %f\t %d %d", rx, ry, ra, x0, y0, mx, my);
+            mp = my * SIZE + mx;
+            if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
+                stop = SIZE * SIZE*3;
+            } else {
+                rx1 += xo;
+                ry1 += yo;
+                stop++;
+            }
+
+        }
+        stop = 0;
+        nTan = -tan(ra * PI / 180);
+        if (ra > 90 && ra < 270) {
+            rx2 = x1 - 0.0001;
+            ry2 = (x1 - rx2) * nTan + y1;
+            xo = -1;
+            yo = -xo * nTan;
+        }
+        if (ra < 90 || ra > 270) {
+            rx2 = x1 + 1;
+            ry2 = (x1 - rx2) * nTan + y1;
+            xo = 1;
+            yo = -xo * nTan;
+        }
+        if (ra == 270) {
+            rx2 = x1;
+            ry2 = -2000;
+            stop = SIZE * SIZE*3;
+        }
+        if (ra == 90) {
+            rx2 = x1;
+            ry2 = 2000;
+            stop = SIZE * SIZE*3;
+        }
+        while (stop < SIZE * SIZE*3) {
+
+            mx = (int) (rx2) / (1920 / SIZE);
+            my = (int) (ry2) / (1080 / SIZE);
+            //SDL_Log("%f %f %d\t %f %f\t %d %d\t %d", rx2, ry2, ra, x0, y0, mx, my, angle);
+            mp = my * SIZE + mx;
+            if (mx >= 0 && mx < SIZE && my >= 0 && my < SIZE && listOfBlock[my][mx] > 0) {
+                stop = SIZE * SIZE*3;
+            } else {
+                rx2 += xo;
+                ry2 += yo;
+                stop++;
+            }
+
+        }
+        //SDL_Log("");
+        //SDL_Log("");
+        //SDL_Log("");
         //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-        //SDL_RenderDrawLineF(renderer, x1, y1, rx1, ry1);
-        return listOfBlock[(int) (ry1) / (1080 / SIZE)][(int) (rx1) / (1920 / SIZE)]+10;
+        //SDL_RenderDrawLineF(renderer, x0, y0, rx1, ry1);
+        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        //SDL_RenderDrawLineF(renderer, x0, y0, rx2, ry2);
+        //SDL_Log("%d %f %f", ra, aTan, nTan);
+        if (distance(x1, y1, rx1, ry1) > distance(x1, y1, rx2, ry2)) {
+            point[i].x = rx2;
+            point[i].y = ry2;
+            //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            //SDL_RenderDrawLineF(renderer, x1, y1, rx2, ry2);
+            typeOfWall[i] =  listOfBlock[(int) (ry2) / (1080 / SIZE)][(int) (rx2) / (1920 / SIZE)];
+        } else if (distance(x1, y1, rx1, ry1) < distance(x1, y1, rx2, ry2)) {
+            point[i].x = rx1;
+            point[i].y = ry1;
+            //SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+            //SDL_RenderDrawLineF(renderer, x1, y1, rx1, ry1);
+            typeOfWall[i] = listOfBlock[(int) (ry1) / (1080 / SIZE)][(int) (rx1) / (1920 / SIZE)]+10;
+        }
+        ca[i] = angle-ra;
+        ra += 1;
+        if (ca[i] < 0) {
+            ca[i] += 360;
+        }
+        if (ca[i] > 360) {
+            ca[i] -= 360;
+        }
+        //SDL_Log("%f", ca[i]);
     }
-    return -1;
+
+    return 1;
 }

@@ -39,13 +39,21 @@ int main(int argc, char* argv[]) {
     SDL_Window* SDLWindow;
     SDL_Renderer* SDLRenderer;
     SDL_Event newEvent;
+    SDL_CreateWindowAndRenderer(1920, 1080, SDL_WINDOW_FULLSCREEN_DESKTOP, &SDLWindow, &SDLRenderer);
     int running = 1;
     int speed = 3;
     int logSize = 0;
     int angle = 0;
     int i;
     int z = 0;
-    SDL_CreateWindowAndRenderer(1920, 1080, SDL_WINDOW_FULLSCREEN_DESKTOP, &SDLWindow, &SDLRenderer);
+    SDL_Surface* allImageLoad[8] = {SDL_LoadBMP("src/bluestone.bmp"), SDL_LoadBMP("src/colorstone.bmp"), SDL_LoadBMP("src/eagle.bmp"), SDL_LoadBMP("src/greystone.bmp"), SDL_LoadBMP("src/mossy.bmp"), SDL_LoadBMP("src/purplestone.bmp"), SDL_LoadBMP("src/redbrick.bmp"), SDL_LoadBMP("src/wood.bmp")};
+    SDL_Texture* allTextureImage[8];
+    uint32_t* pixels[8];
+    for (int j = 0; j<8; j++) {
+        allTextureImage[j] = SDL_CreateTextureFromSurface(SDLRenderer, allImageLoad[j]);
+        SDL_FreeSurface(allImageLoad[j]);
+        pixels[j] = (uint32_t*) allImageLoad[j]->pixels;
+    }
     SDL_Texture* playerTexture = SDL_CreateTextureFromSurface(SDLRenderer, playerImage);
     SDL_FreeSurface(playerImage);
     SDL_RenderSetVSync(SDLRenderer, 60);
@@ -71,6 +79,8 @@ int main(int argc, char* argv[]) {
     int hasChanged = 0;
 
     int typeOfWall[90];
+
+    float ca[90];
     while (running) {
 
         SDL_PollEvent(&newEvent);
@@ -101,11 +111,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(SDLRenderer, 0, 0 ,0, 255);
         SDL_RenderClear(SDLRenderer);
         calculateAnglePointPlayer(firstPlayer, angle, 1920, 0, 25, 0, &viewPointForWalls, &viewPointOfPlayer);
-        i = 0;
-        for (int j = -45; j <= 45; j++) {
-            typeOfWall[i] = DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, firstPlayer->posX+25, firstPlayer->posY+25, listOfBlock, angle + j, SDLRenderer, &listOfPoint[i]);
-            i++;
-        }
+        DDA(viewPointOfPlayer.x, viewPointOfPlayer.y, firstPlayer->posX+25, firstPlayer->posY+25, listOfBlock, angle, SDLRenderer, listOfPoint, typeOfWall, ca);
         movePlayer(firstPlayer, speed, keyState, &playerRect, &viewPointForWalls, angle*PI/180);
         changeAngle(&angle, keyState);
 
@@ -124,7 +130,7 @@ int main(int argc, char* argv[]) {
         } else { //3D Graphics
             for (i = 0; i < 90;i++) {
                 newRect.x = (1920/90)*i;
-                newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y))*5);
+                newRect.h = (SIZE*SIZE*1080)/((distance(viewPointOfPlayer.x, viewPointOfPlayer.y, listOfPoint[i].x, listOfPoint[i].y))*cos(ca[i]*PI/180)*3);
                 newRect.y = 540-newRect.h/2+z;
                 skyRect.y = 0;
                 skyRect.h = newRect.y;
@@ -164,6 +170,7 @@ int main(int argc, char* argv[]) {
                     default: break;
                 }
                 SDL_RenderFillRect(SDLRenderer, &newRect);
+                //SDL_RenderCopy(SDLRenderer, allTextureImage[0], NULL, &newRect);
             }
         }
 
